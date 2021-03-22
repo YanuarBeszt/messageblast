@@ -138,17 +138,17 @@ class Contact extends CI_Controller
 						"last_updated_by" => $this->session->userdata("user_logged")->id,
 						"is_deleted" => 'n',
 					);
-					array_push($insertArray,$data);
+					array_push($insertArray, $data);
 				}
 			}
 
 			$insert = $this->db->insert_batch("contact", $insertArray);
-			if ($insert == true) {
-				$res = $this->response([1, 'Success import your data.']);
+			if ($insert) {
+				$res = $this->response([0, 'Success import your data.']);
 				echo json_encode($res);
 				return;
 			} else {
-				$res = $this->response([0, 'Failed to import your data.']);
+				$res = $this->response([1, 'Failed to import your data.']);
 				echo json_encode($res);
 				return;
 			}

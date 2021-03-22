@@ -131,9 +131,11 @@ class Email extends CI_Controller
 		$this->db->select('name');
 		$this->db->where('email', $emailto);
 		$dataName = $this->db->get("contact")->result();
-
-		$messageOut = str_replace("<name>",$dataName->name,$message);
-
+		if (isset($dataName->name)) {
+			$messageOut = str_replace("<name>", $dataName->name, $message);
+		} else {
+			$messageOut = $message;
+		}
 		$config['protocol'] = 'smtp';
 		$config['smtp_host'] = 'ssl://smtp.gmail.com';
 		$config['smtp_port'] = '465';
@@ -158,8 +160,8 @@ class Email extends CI_Controller
 			echo json_encode($res);
 			return;
 		} else {
-			$res = $this->response([0, 'Email ' . $emailto . ' Gagal Dikirim!']);
-			$res .= show_error($this->email->print_debugger());
+			$res = $this->response([0, 'Email ' . $emailto]);
+			// $res = $this->email->print_debugger();
 			echo json_encode($res);
 			return;
 		}
